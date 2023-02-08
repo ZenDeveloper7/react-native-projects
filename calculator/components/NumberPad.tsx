@@ -12,6 +12,7 @@ import ButtonTheme from "./ButtonTheme";
 type NumberPadProps = {
   value: string | number;
   theme: ButtonTheme;
+  onPress(): void;
 };
 
 var numberWidth = Dimensions.get("window").width / 5;
@@ -19,6 +20,7 @@ var numberWidth = Dimensions.get("window").width / 5;
 const NumberPad = (props: NumberPadProps): JSX.Element => {
   return (
     <TouchableOpacity
+      onPress={props.onPress}
       style={[
         styles.default,
         {

@@ -15,10 +15,51 @@ var screenHeight = Dimensions.get("window").height / 3;
 
 const App = (): JSX.Element => {
   const [output, setOutput] = useState(0);
+  const [first, setFirst] = useState("");
+  const [second, setSecond] = useState("");
+  const [operation, setOperation] = useState("");
 
   const isDarkMode = useColorScheme() === "dark";
 
-  const onButtonPress = (id: string) => {};
+  const onButtonPress = (value: string | number) => {
+    if (typeof value == "number") {
+      if (operation == "") {
+        setFirst(first.concat(value.toString()));
+        setOutput(Number(first));
+        console.log("first - %s", first);
+      } else {
+        setSecond(second.concat(value.toString()));
+        setOutput(Number(second));
+        console.log("secondary - %s", second);
+      }
+    } else if (value == "c") {
+      setFirst("");
+      setSecond("");
+      setOperation("");
+      setOutput(0);
+    } else if (value != "=") {
+      setOperation(value);
+      console.log("Operation - %s", operation);
+    } else {
+      setOutput(doOperation(operation));
+    }
+  };
+
+  const doOperation = (operation: string): number => {
+    if (operation == "+") {
+      return Number(first) + Number(second);
+    } else if (operation == "-") {
+      return Number(first) - Number(second);
+    } else if (operation == "x") {
+      return Number(first) * Number(second);
+    } else if (operation == "/") {
+      return Number(first) / Number(second);
+    } else if (operation == "%") {
+      return Number(first) % Number(second);
+    } else {
+      return Number(first) + Number(second);
+    }
+  };
 
   const keys: (string | number)[] = [
     "c",
@@ -61,6 +102,7 @@ const App = (): JSX.Element => {
         {keys.map((value) => {
           return (
             <NumberPad
+              onPress={() => onButtonPress(value)}
               key={value}
               value={value}
               theme={
