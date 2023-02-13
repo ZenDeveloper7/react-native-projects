@@ -1,65 +1,35 @@
-import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, FAB, Card, Button } from "react-native-paper";
-import { StyleSheet, ScrollView, Dimensions, View } from "react-native";
-
-const height = Dimensions.get("window").height;
-const width = Dimensions.get("window").width;
+import React from 'react';
+import {
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  View,
+  Text,
+  SafeAreaView,
+} from 'react-native';
+import Card from './components/Card';
+import NoteModel from './models/NoteModel';
 
 const Notes = (): JSX.Element => {
-  var myNotes = [
-    {
-      id: 1,
-      title: "Note 1",
-      content: "Hey! This is my new react-native app"
-    },
-    {
-      id: 2,
-      title: "Note 2",
-      content: "Hey! This is my new react-native app"
-    },
-    {
-      id: 3,
-      title: "Note 3",
-      content: "Hey! This is my new react-native app"
-    },
-    {
-      id: 4,
-      title: "Note 4",
-      content: "Hey! This is my new react-native app"
-    },
-    {
-      id: 5,
-      title: "Note 5",
-      content: "Hey! This is my new react-native app"
-    }
+  var myNotes: NoteModel[] = [
+    {id: 1, title: 'Note 1', content: 'Hey! nice working with you'},
+    {id: 2, title: 'Note 2', content: 'Hey! nice working with you'},
+    {id: 3, title: 'Note 3', content: 'Hey! nice working with you'},
+    {id: 4, title: 'Note 4', content: 'Hey! nice working with you'},
+    {id: 5, title: 'Note 5', content: 'Hey! nice working with you'},
+    {id: 6, title: 'Note 6', content: 'Hey! nice working with you'},
+    {id: 7, title: 'Note 7', content: 'Hey! nice working with you'},
+    {id: 8, title: 'Note 8', content: 'Hey! nice working with you'},
   ];
 
   return (
-    <SafeAreaView style={[styles.background]}>
-      <Text variant="labelLarge" style={{ marginBottom: 10 }}>
-        My Notes
-      </Text>
-      <View style={styles.cardParent}>
-        {myNotes.map((note: { id: number; title: string; content: string }) => (
-          <Card style={styles.noteCard} key={note.id}>
-            {/* <Card.Cover
-              source={{
-                uri: "https://images.pexels.com/photos/15265348/pexels-photo-15265348.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              }}
-            /> */}
-            <Card.Title title={note.title} />
-            <Card.Content>
-              <Text>{note.content}</Text>
-            </Card.Content>
-          </Card>
+    <SafeAreaView style={styles.background}>
+      <Text style={[styles.heading, styles.text]}>Notes</Text>
+      <ScrollView>
+        {myNotes.map(e => (
+          <Card key={e.id} id={e.id} title={e.title} content={e.content} />
         ))}
-      </View>
-      <FAB
-        icon="plus"
-        style={styles.fab}
-        onPress={() => console.log("Pressed")}
-      />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -67,25 +37,17 @@ const Notes = (): JSX.Element => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    padding: 5
+    backgroundColor: 'black',
   },
-  noteCard: {
-    width : width / 2.25,
-    marginBottom: 10,
+  text: {
+    color: 'white',
   },
-  cardParent: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignSelf:'flex-start',
-    alignItems:'flex-start',
-    justifyContent: "space-evenly"
+  heading: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    margin: 20,
   },
-  fab: {
-    position: "absolute",
-    margin: 16,
-    right: 0,
-    bottom: 0
-  }
+  container: {},
 });
 
 export default Notes;
