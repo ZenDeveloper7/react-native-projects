@@ -5,7 +5,8 @@ import {
   Text,
   View,
   useColorScheme,
-  Dimensions
+  Dimensions,
+  TouchableWithoutFeedback
 } from "react-native";
 
 import NumberPad from "./components/NumberPad";
@@ -13,41 +14,46 @@ import ButtonTheme from "./components/ButtonTheme";
 
 var screenHeight = Dimensions.get("window").height / 3;
 
+var first = "";
+var second = "";
+var operation = "";
+
 const App = (): JSX.Element => {
   const [output, setOutput] = useState(0);
-  const [first, setFirst] = useState("");
-  const [second, setSecond] = useState("");
-  const [operation, setOperation] = useState("");
 
-  const isDarkMode = useColorScheme() === "dark";
+  let isDarkMode = useColorScheme() === "dark";
 
   const onButtonPress = (value: string | number) => {
     if (typeof value == "number") {
       if (operation == "") {
-        setFirst(first.concat(value.toString()));
+        first = first + value.toString();
         setOutput(Number(first));
         console.log("first - %s", first);
       } else {
-        setSecond(second.concat(value.toString()));
+        second += value.toString();
         setOutput(Number(second));
         console.log("secondary - %s", second);
       }
     } else if (value == "c") {
-      setFirst("");
-      setSecond("");
-      setOperation("");
+      first = "";
+      second = "";
+      operation = "";
       setOutput(0);
     } else if (value != "=") {
-      setOperation(value);
+      operation = value;
       console.log("Operation - %s", operation);
     } else {
-      setOutput(doOperation(operation));
+      var a = doOperation(operation);
+      setOutput(a);
+      console.log(output);
     }
   };
 
   const doOperation = (operation: string): number => {
     if (operation == "+") {
-      return Number(first) + Number(second);
+      var answer = Number(first) + Number(second);
+      console.log("Answer - %s", answer);
+      return answer;
     } else if (operation == "-") {
       return Number(first) - Number(second);
     } else if (operation == "x") {
@@ -84,7 +90,7 @@ const App = (): JSX.Element => {
   ];
 
   return (
-    <SafeAreaView>
+    <SafeAreaView >
       <View style={styles.resultScreen}>
         <Text
           style={[styles.resultText, { color: isDarkMode ? "white" : "black" }]}
@@ -126,16 +132,15 @@ const App = (): JSX.Element => {
 
 const styles = StyleSheet.create({
   resultScreen: {
-    alignItems: "flex-end",
-    justifyContent: "flex-end",
     height: screenHeight,
-    paddingEnd: 20,
-    paddingBottom: 20
+    padding: 20
   },
   resultText: {
     fontWeight: "bold",
     fontSize: 30,
-    color: "white"
+    color: "white",
+    alignSelf: "flex-end",
+    justifyContent: "flex-end"
   },
   numberPad: {
     textAlign: "center",
