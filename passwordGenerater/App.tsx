@@ -16,6 +16,12 @@ export default function App() {
   const [hasUppercase, setHasUppercase] = useState(false);
   const [hasNumbers, setHasNumbers] = useState(false);
   const [hasSymbols, setHasSymbols] = useState(false);
+  const [password, setPassword] = useState("");
+
+  const lowerCaseAlphabets = "abcdefghijklmnopqrstuvwxyz";
+  const upperCaseAlphabets = lowerCaseAlphabets.toUpperCase();
+  const numbers = "0123456789";
+  const symbols = "!@#$%^&*(){}[]:;<>,.?/-_=+";
 
   function reset() {
     setPasswordLength(6);
@@ -23,35 +29,48 @@ export default function App() {
     setHasUppercase(false);
     setHasNumbers(false);
     setHasSymbols(false);
-    console.log("====================================");
-    console.log(
-      passwordLength +
-        "" +
-        hasLowercase +
-        "" +
-        hasUppercase +
-        "" +
-        hasNumbers +
-        "" +
-        hasSymbols
-    );
-    console.log("====================================");
+    setPassword("");
   }
 
   function generate() {
-    console.log("====================================");
-    console.log(
-      passwordLength +
-        "" +
-        hasLowercase +
-        "" +
-        hasUppercase +
-        "" +
-        hasNumbers +
-        "" +
-        hasSymbols
-    );
-    console.log("====================================");
+    var temp = "";
+    for (let i = 0; i < passwordLength; i++) {
+      temp = temp.concat(getCharacter());
+    }
+    setPassword(temp);
+  }
+
+  function getCharacter(): string {
+    switch (getRandomNumber(4)) {
+      case 1:
+        if (hasNumbers) {
+          return numbers.charAt(getRandomNumber(numbers.length));
+        }
+      case 2:
+        if (hasSymbols) {
+          return symbols.charAt(getRandomNumber(symbols.length));
+        }
+      case 3:
+        if (hasLowercase) {
+          return lowerCaseAlphabets.charAt(
+            getRandomNumber(lowerCaseAlphabets.length)
+          );
+        }
+      case 4:
+        if (hasUppercase) {
+          return upperCaseAlphabets.charAt(
+            getRandomNumber(upperCaseAlphabets.length)
+          );
+        }
+      default:
+        return lowerCaseAlphabets.charAt(
+          getRandomNumber(lowerCaseAlphabets.length)
+        );
+    }
+  }
+
+  function getRandomNumber(max: number): number {
+    return Math.floor(Math.random() * max) + 1;
   }
 
   return (
@@ -63,8 +82,8 @@ export default function App() {
           style={styles.textInput}
           placeholder="eg: 8"
           keyboardType="numeric"
-          defaultValue="6"
-          value={passwordLength.toString()}
+          // defaultValue="6"
+          // value={passwordLength.toString()}
           onChangeText={(text) => setPasswordLength(Number(text))}
         />
       </View>
@@ -119,22 +138,22 @@ export default function App() {
             styles.button,
             { flex: 1, marginEnd: 5, backgroundColor: "#2F58CD" }
           ]}
-          onPress={() => {
-            generate();
-          }}
+          onPress={generate}
         >
           <Text style={styles.buttonText}>Generate</Text>
         </Pressable>
 
         <Pressable
           style={[styles.button, { flex: 1, marginStart: 5 }]}
-          onPress={() => {
-            reset();
-          }}
+          onPress={reset}
         >
           <Text style={styles.buttonText}>Reset</Text>
         </Pressable>
       </View>
+
+      <Text style={[styles.output, { marginTop: 20 }]}>
+        Password : {password}
+      </Text>
     </SafeAreaView>
   );
 }
@@ -154,9 +173,11 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   textInput: {
-    flex: 1,
     borderColor: "black",
     borderWidth: 1,
+    height: 45,
+    width: 70,
+    padding: 10,
     borderRadius: 7
   },
   buttonText: {
@@ -169,5 +190,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     alignItems: "center"
+  },
+  output: {
+    fontSize: 20,
+    color: "black",
+    fontWeight: "bold"
   }
 });
